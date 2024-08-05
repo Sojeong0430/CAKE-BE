@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>친구 추가</title>
+</head>
+<body>
+    <h1>친구 추가</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">추가</button>
+    </form>
+    <a href="{% url 'contacts:contact_list' %}">친구 목록으로 돌아가기</a>
+</body>
+</html>

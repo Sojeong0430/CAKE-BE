@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>친구 목록</title>
+</head>
+<body>
+    <h1>친구 목록</h1>
+    <ul>
+        {% for contact in contacts %}
+            <li>
+                이름: {{ contact.name }} <br>
+                생일: {{ contact.birthday }} <br>
+                D-Day: {{ contact.d_day }} <br>
+                <a href="{{ contact.party_room_address }}" target="_blank">파티룸 방문하기</a>
+            </li>
+            <hr>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'contacts:add_contact' %}">친구 추가</a>
+</body>
+</html>

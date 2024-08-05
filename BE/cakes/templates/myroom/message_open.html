@@ -1,0 +1,8 @@
+<h5>{{owner.message_set.count}}개의 메시지가 있습니다.</h5>
+<div>
+    <ul>
+    {% for message in owner.message_set.all %}
+        <li>{{ message.message_content }}</li>
+    {% endfor %}
+    </ul>
+</div>

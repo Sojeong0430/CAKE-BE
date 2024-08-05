@@ -1,0 +1,31 @@
+<body>
+
+    {% if request.user.is_authenticated %}
+    <h6> {{owner.username}}님의 파티룸 / birthday:{{birthday}} / D-day! </h6>
+    <iframe height='400' width='250'></iframe><br><br>
+    <button onclick="copyCurrentUrl()">초대장 공유</button>
+    <script>
+        function copyCurrentUrl() {
+            const currentUrl = window.location.href;
+            const tempInput = document.createElement('input');
+            tempInput.value = currentUrl;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999);
+
+            document.execCommand('copy');
+
+            document.body.removeChild(tempInput);
+
+            alert('초대장 URL이 복사되었습니다: ' + currentUrl);
+        } 
+    </script><br> 
+    <a href={% url 'cakes:messagemaker' %}><input type='button' value='메시지 작성'></a>
+    
+
+    {% else %}
+    <h3> !로그인이 필요한 서비스 입니다! </h3>
+    <a href={% url 'accounts:login' %}><input type='button' value='확인'></a>
+    {% endif %}
+
+<body>
