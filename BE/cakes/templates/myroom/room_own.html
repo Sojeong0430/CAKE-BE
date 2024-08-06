@@ -7,13 +7,9 @@
     <button id="copyButton">초대장 공유</button>
     <script>
         document.getElementById('copyButton').addEventListener('click', function() {
-            // 현재 페이지 URL 가져오기
+            
             const currentUrl = window.location.href;
-    
-            // 복사할 URL 만들기 (currentUrl에서 특정 부분을 변경)
             const newUrl = currentUrl.replace('/ownroom/', '/visit/');
-    
-            // 텍스트 영역을 임시로 만들어 URL 복사
             const tempInput = document.createElement('input');
             tempInput.value = newUrl;
             document.body.appendChild(tempInput);
@@ -24,7 +20,7 @@
             alert('URL이 복사되었습니다: ' + newUrl);
         });
     </script>
-    <br> <!--파티룸 초대장 url 공유 기능은 해당 페이지가 아닌 visitor 페이지의 url이 복사되어야합니다.-->
+    <br> 
     <a href={% url 'contacts:contact_list' %}><input type='button' value='친구목록'></a><br>
     <a href={% url 'cakes:message_open' owner.id %}><input type='button' value='메시지 확인'></a><br><br><br><br>
     <a href={% url 'main' %}><input type='button' value='메인으로'></a>
