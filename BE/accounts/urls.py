@@ -13,6 +13,6 @@ urlpatterns = [
     #api
     path('api/retrieveuser/<int:user_id>/',RetrieveUserAPI.as_view()),
     path('api/signup/',SignupAPI.as_view()), #회원가입
-    path("api/auth/",AuthAPI.as_view()), # 로그인/로그아웃
+    path("api/auth/",AuthAPI.as_view()), # 로그인
     path("api/auth/refresh/",TokenRefreshView.as_view()), #jwt 토큰 재발급
 ]

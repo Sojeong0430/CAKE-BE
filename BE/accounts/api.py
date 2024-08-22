@@ -24,25 +24,24 @@ class RetrieveUserAPI (APIView):
         serializer = UserSerializer1(User)
         return Response(serializer.data)
     
-#로그인/ 로그아웃
+#로그인
 class AuthAPI (APIView):
-    # 로그인
-    def post(self, request):
-    	# 유저 인증
-        user = authenticate(
-            username=request.data.get("username"), password=request.data.get("password")
+
+    def post(self,request):
+        user =  authenticate( #일치하면 사용자객체 반환 / 않으면 'None'반환
+            username = request.data.get("username"),
+            password = request.data.get("password")
         )
-        # 이미 회원가입 된 유저일 때
+
         if user is not None:
-            serializer = LoginSerializer(user)
-            # jwt 토큰 접근
+            serializer = UserSerializer2(user)
             token = TokenObtainPairSerializer.get_token(user)
             refresh_token = str(token)
             access_token = str(token.access_token)
             res = Response(
                 {
                     "user": serializer.data,
-                    "message": "login success",
+                    "message": "로그인 성공",
                     "token": {
                         "access": access_token,
                         "refresh": refresh_token,
@@ -50,22 +49,9 @@ class AuthAPI (APIView):
                 },
                 status=status.HTTP_200_OK,
             )
-            # jwt 토큰 => 쿠키에 저장
-            res.set_cookie("access", access_token, httponly=True)
-            res.set_cookie("refresh", refresh_token, httponly=True)
             return res
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    # 로그아웃
-    def delete(self, request):
-        # 쿠키에 저장된 토큰 삭제 => 로그아웃 처리
-        response = Response({
-            "message": "Logout success"
-            }, status=status.HTTP_202_ACCEPTED)
-        response.delete_cookie("access")
-        response.delete_cookie("refresh")
-        return response
+            return Response({'error':'로그인 실패'},status=status.HTTP_400_BAD_REQUEST)
 
 #회원가입
 class SignupAPI (APIView):
@@ -82,7 +68,7 @@ class SignupAPI (APIView):
             res = Response(
                 {
                     "user": serializer.data,
-                    "message": "register successs",
+                    "message": "회원가입 성공",
                     "token": {
                         "access": access_token,
                         "refresh": refresh_token,

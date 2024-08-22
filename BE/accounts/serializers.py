@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import CustomUser
-from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password
 
 class UserSerializer1 (serializers.ModelSerializer):
     class Meta :
@@ -8,29 +8,22 @@ class UserSerializer1 (serializers.ModelSerializer):
         fields = ['id','username','birthday','pieces']
 
 class UserSerializer2 (serializers.ModelSerializer):
-    class Meta:
-        model = CustomUser
-        fields = ('username','password','email','birthday')
-
-        def create(self,validated_data): #새로운 사용자 객체를 생성할때 호출된다
-            user = CustomUser.objects.create_user(
-                username=validated_data['username'],
-                password= validated_data['password'],
-                email = validated_data['email'],
-                birthday = validated_data['birthday'],
-            )
-            return user
-        
-class LoginSerializer (serializers.ModelSerializer):
-    username = serializers.CharField()
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'password']
+        fields = ('username', 'password', 'email', 'birthday')
 
-    def validate(self, data):
-        user = authenticate(username=data['username'], password=data['password'])
-        if not user:
-            raise serializers.ValidationError("Invalid credentials")
-        return data
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data.get('password'))
+        return super(UserSerializer2, self).create(validated_data)
+
+    def update(self, instance, validated_data):
+        if 'password' in validated_data:
+            validated_data['password'] = make_password(validated_data.get('password'))
+        return super(UserSerializer2, self).update(instance, validated_data)
+
+class LoginSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = '__all__'

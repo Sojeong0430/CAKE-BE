@@ -45,10 +45,10 @@ INSTALLED_APPS = [
     'users',
     'contacts',
     #기타
-    'rest_framework',  # 새로 추가
+    'rest_framework', 
     'rest_framework_simplejwt',
-    #'rest_framework.authtoken',  # 새로 추가
-    'corsheaders',  # 새로 추가
+    #'rest_framework.authtoken', 
+    'corsheaders', 
 ]
 
 MIDDLEWARE = [
