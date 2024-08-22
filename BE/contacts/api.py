@@ -1,0 +1,65 @@
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import *
+from accounts.models import CustomUser
+from .serializers import FriendADDSerializer, FriendListSerializer
+from rest_framework.permissions import AllowAny #일시적으로 인증 비활성화, 개발 중에만 사용
+
+#친구 추가 API / 수정사항 필요, 이미 추가 되어있는 친구라면 안되도록 해야함
+#파티룸 주소 필드 수정 / 디데이 계산하는 기능 
+class FriendAddAPI (APIView):
+
+    permission_classes = [AllowAny] #
+
+    def post(self,request,owner_id):
+
+        try:
+            owner = CustomUser.objects.get(id=owner_id)
+        except CustomUser.DoesNotExist :
+            return Response({'error':'owner가 존재하지 않습니다'},status=status.HTTP_404_NOT_FOUND)
+        
+        serializer_username = FriendADDSerializer(data=request.data)
+        serializer_username.is_valid(raise_exception=True)
+        Friend_username = serializer_username.validated_data['username']
+
+        try:
+            SEARCH_friend = CustomUser.objects.get(username = Friend_username)
+        except CustomUser.DoesNotExist :
+            return Response({'error':'해당하는 친구가 존재하지 않습니다'},status=status.HTTP_404_NOT_FOUND)
+
+        ADD_friend = Contact(
+            owner = owner,
+            username=SEARCH_friend.username,
+            birthday=SEARCH_friend.birthday,
+            d_day = 10,
+            #party_room_address = 
+        )
+        ADD_friend.save()
+
+        return Response({'success':'친구추가 성공'}, status=status.HTTP_201_CREATED)
+
+#친구 리스트 조회 API
+class FriendListAPI (APIView):
+
+    permission_classes = [AllowAny]#
+    
+    def get (self,request,owner_id):
+        owner = CustomUser.objects.get(id=owner_id)
+        queryset = Contact.objects.filter(owner=owner)
+        serializer = FriendListSerializer(queryset,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
+#친구 삭제 API // 로그인 구현 후 다시 구현
+class FriendDeleteAPI (APIView):
+    
+    permission_classes = [AllowAny] #실제로는 로그인이 되어있어야함. 본인의 친구창에서 지워야하기 때문
+
+    def delete (self,request,friend_id):
+        
+        try :
+            friend = Contact.objects.get(id=friend_id)
+        except Contact.DoesNotExist:
+            return Response({'error':'해당하는 친구가 없습니다'},status=status.HTTP_404_NOT_FOUND)
+        friend.delete()
+        return Response({'success':'친구 삭제 완료'},status=status.HTTP_204_NO_CONTENT)   
