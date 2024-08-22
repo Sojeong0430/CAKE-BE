@@ -1,0 +1,1 @@
+default_app_config = 'cakes.apps.Cake_CustomConfig'

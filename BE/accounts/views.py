@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .forms import SignUpForm
 
+from rest_framework import generics
+from .models import CustomUser
+
 # Create your views here.
 
 def signup_view(request):
