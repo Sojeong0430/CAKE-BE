@@ -79,8 +79,20 @@ class AuthAPI (APIView):
         else:
             return Response({'error':'로그인 실패'},status=status.HTTP_400_BAD_REQUEST)
 
+#로그아웃 : 토큰 삭제
+class LogoutAPI(APIView):
+
+    def delete(self,request):
+        response = Response({'message':'로그아웃 성공'},status=status.HTTP_202_ACCEPTED)
+        response.delete_cookie("access")
+        response.delete_cookie("refresh")
+        return response
+
+
 #회원가입
 class SignupAPI (APIView):
+
+    permission_classes = [AllowAny]
 
     def post(self, request):
         serializer = UserSerializer2(data=request.data)
@@ -109,10 +121,12 @@ class SignupAPI (APIView):
             return res
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-#회원탈퇴 / 고치기
+#회원탈퇴
 class AccountDeleteAPI (APIView):
 
     def delete(self, request):
+
+        permission_classes = [AllowAny]
 
         try:
             user = request.user
@@ -124,9 +138,6 @@ class AccountDeleteAPI (APIView):
             response.delete_cookie('refresh')
             
             return response
+        
         except Exception as e:
             return Response({'error': '탈퇴에 실패했습니다.', 'details': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-#프로필 수정
-class UpdateProfileAPI (APIView):
-    pass

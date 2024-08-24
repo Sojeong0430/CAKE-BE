@@ -155,7 +155,7 @@ REST_FRAMEWORK = {
     ),
 }
 
-# JWT 설정 (선택사항: Token 대신 JWT를 사용하려는 경우)
+# JWT 설정
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
