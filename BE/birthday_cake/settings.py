@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     #기타
     'rest_framework', 
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     #'rest_framework.authtoken', 
     'corsheaders', 
 ]
@@ -148,7 +149,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication'
     ],
       'DEFAULT_PERMISSION_CLASSES': (
-        # 'rest_framework.permissions.IsAuthenticated', # 인증된 사용자만 접근
+        'rest_framework.permissions.IsAuthenticated', # 인증된 사용자만 접근
         # 'rest_framework.permissions.IsAdminUser', # 관리자만 접근
         #'rest_framework.permissions.AllowAny', # 누구나 접근
     ),
@@ -156,10 +157,10 @@ REST_FRAMEWORK = {
 
 # JWT 설정 (선택사항: Token 대신 JWT를 사용하려는 경우)
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': False,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256', #JWT를 서명할 때 사용할 해싱 알고리즘을 지정함
@@ -186,8 +187,3 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 } 
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # 기본 인증 백엔드
-    # 다른 인증 백엔드가 필요한 경우 여기에 추가
-]

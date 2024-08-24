@@ -2,10 +2,6 @@ from rest_framework import serializers
 from .models import CustomUser
 from django.contrib.auth.hashers import make_password
 
-class UserSerializer1 (serializers.ModelSerializer):
-    class Meta :
-        model = CustomUser
-        fields = ['id','username','birthday','pieces']
 
 class UserSerializer2 (serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

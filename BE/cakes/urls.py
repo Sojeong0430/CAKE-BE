@@ -15,7 +15,7 @@ urlpatterns = [
     #api
     path('api/createmessage/<int:user_id>/',CreateMessageAPI.as_view()),
     path('api/deletemessage/<int:message_id>/',DeleteMessageAPI.as_view()),
-    path('api/messagelist/<int:owner_id>/',MessageListAPI.as_view()),
+    path('api/messagelist',MessageListAPI.as_view()),
     path('api/messageretrieve/<int:message_id>/',MessageRetieve.as_view()), 
     path('api/cake-custom/<int:owner_id>/',CakeCustomAPI.as_view()),
     ]

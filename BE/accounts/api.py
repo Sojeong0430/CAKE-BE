@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserSerializer1 , UserSerializer2 , LoginSerializer
+from .serializers import UserSerializer2 
 from .models import CustomUser
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate
@@ -9,24 +9,48 @@ from django.shortcuts import render, get_object_or_404
 from birthday_cake.settings import SECRET_KEY
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer , TokenRefreshSerializer
 import jwt
+from rest_framework.permissions import AllowAny #실험용
+from rest_framework_simplejwt.tokens import RefreshToken
 
-#유저 조회(pk,아이디,생년월일,케이크 몇 조각 쌓였는지)
+# 유저 정보 확인
 class RetrieveUserAPI (APIView):
 
-    permission_classes = [AllowAny]
-
-    def get (self,request,user_id):
-
+    def get(self, request):
         try:
-            User = CustomUser.objects.get(id=user_id)
-        except CustomUser.DoesNotExist:
-            return Response({'error':'해당하는 유저가 존재하지 않습니다'}, status=status.HTTP_404_NOT_FOUND)
-        serializer = UserSerializer1(User)
-        return Response(serializer.data)
+            # access token을 decode 해서 유저 id 추출 => 유저 식별
+            access = request.COOKIES['access']
+            payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
+            pk = payload.get('user_id')
+            user = get_object_or_404(CustomUser, pk=pk)
+            serializer = UserSerializer2(instance=user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except(jwt.exceptions.ExpiredSignatureError):
+            # 토큰 만료 시 토큰 갱신
+            data = {'refresh': request.COOKIES.get('refresh', None)}
+            serializer = TokenRefreshSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                access = serializer.data.get('access', None)
+                refresh = serializer.data.get('refresh', None)
+                payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
+                pk = payload.get('user_id')
+                user = get_object_or_404(CustomUser, pk=pk)
+                serializer = UserSerializer2(instance=user)
+                res = Response(serializer.data, status=status.HTTP_200_OK)
+                res.set_cookie('access', access)
+                res.set_cookie('refresh', refresh)
+                return res
+            raise jwt.exceptions.InvalidTokenError
+
+        except(jwt.exceptions.InvalidTokenError):
+            # 사용 불가능한 토큰일 때
+            return Response(status=status.HTTP_400_BAD_REQUEST)
     
 #로그인
 class AuthAPI (APIView):
 
+    permission_classes = [AllowAny]
+    
     def post(self,request):
         user =  authenticate( #일치하면 사용자객체 반환 / 않으면 'None'반환
             username = request.data.get("username"),
@@ -49,6 +73,8 @@ class AuthAPI (APIView):
                 },
                 status=status.HTTP_200_OK,
             )
+            res.set_cookie("access", access_token, httponly=True) #XSS공격 방지
+            res.set_cookie("refresh", refresh_token, httponly=True) #xss공격 방지
             return res
         else:
             return Response({'error':'로그인 실패'},status=status.HTTP_400_BAD_REQUEST)
@@ -83,13 +109,23 @@ class SignupAPI (APIView):
             return res
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-#로그아웃
-class LogoutAPI (APIView):
-    pass
-
-#회원탈퇴
+#회원탈퇴 / 고치기
 class AccountDeleteAPI (APIView):
-    pass
+
+    def delete(self, request):
+
+        try:
+            user = request.user
+            user.delete()  # 사용자 삭제
+            response = Response({'message': '탈퇴 완료'}, status=status.HTTP_200_OK)
+            
+            # 쿠키에서 JWT 토큰 삭제
+            response.delete_cookie('access')
+            response.delete_cookie('refresh')
+            
+            return response
+        except Exception as e:
+            return Response({'error': '탈퇴에 실패했습니다.', 'details': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 #프로필 수정
 class UpdateProfileAPI (APIView):
