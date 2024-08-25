@@ -23,3 +23,9 @@ class LoginSerializer (serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = '__all__'
+
+
+class RetrieveSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = "__all__"

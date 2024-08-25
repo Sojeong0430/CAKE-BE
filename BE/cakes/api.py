@@ -4,10 +4,12 @@ from rest_framework import status
 from .serializers import *
 from .models import cake_custom , message
 from accounts.models import CustomUser 
-from rest_framework.permissions import AllowAny #일시적으로 인증 비활성화, 개발 중에만 사용
+from rest_framework.permissions import AllowAny
 
 #메시지 작성 API
 class CreateMessageAPI(APIView): 
+
+    permission_classes = [AllowAny]
 
     def post (self,request,user_id):
 
@@ -19,7 +21,7 @@ class CreateMessageAPI(APIView):
         serializer = MessageSerializer(data=request.data)
         if serializer.is_valid():
             message = serializer.save(party=party)
-            return Response(MessageSerializer(message).data,status=status.HTTP_201_CREATED)
+            return Response({'message':'축하 메시지 전송 완료'},status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
@@ -79,3 +81,23 @@ class CakeCustomAPI (APIView):
         cake = serializer.save()
         serializer = CakeSerializer(cake)
         return Response(serializer.data)
+    
+#케이크 디자인 불러오기 API (owner)    
+class CakeGetAPI (APIView):
+
+    def get (self,request):
+        owner = request.user
+        cake = cake_custom.objects.get(party=owner)
+        serializer = CakeSerializer(cake)
+        return Response (serializer.data)
+
+#케이크 디자인 불러오기 API (visit)     
+class CakeGetVisitAPI (APIView):
+
+    permission_classes = [AllowAny]
+
+    def get (self,request,owner_username):
+        owner = CustomUser.objects.get(username=owner_username)
+        cake = cake_custom.objects.get(party=owner)
+        serializer = CakeSerializer(cake)
+        return Response (serializer.data)

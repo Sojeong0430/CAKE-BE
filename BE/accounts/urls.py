@@ -11,7 +11,7 @@ urlpatterns = [
     path('logout/', logout_view, name='logout'),
 
     #api
-    path('api/retrieveuser/<int:user_id>/',RetrieveUserAPI.as_view()),
+    path('api/retrieveuser/',RetrieveUserAPI.as_view()),#유저 개별 조회
     path('api/signup/',SignupAPI.as_view()), #회원가입
     path("api/auth/",AuthAPI.as_view()), # 로그인
     path("api/logout/",LogoutAPI.as_view()),#로그아웃

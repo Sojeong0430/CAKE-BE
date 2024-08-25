@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserSerializer2 
+from .serializers import UserSerializer2 , RetrieveSerializer
 from .models import CustomUser
 from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate
@@ -22,7 +22,7 @@ class RetrieveUserAPI (APIView):
             payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
             pk = payload.get('user_id')
             user = get_object_or_404(CustomUser, pk=pk)
-            serializer = UserSerializer2(instance=user)
+            serializer = RetrieveSerializer(instance=user)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except(jwt.exceptions.ExpiredSignatureError):
@@ -35,7 +35,7 @@ class RetrieveUserAPI (APIView):
                 payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
                 pk = payload.get('user_id')
                 user = get_object_or_404(CustomUser, pk=pk)
-                serializer = UserSerializer2(instance=user)
+                serializer = RetrieveSerializer(instance=user)
                 res = Response(serializer.data, status=status.HTTP_200_OK)
                 res.set_cookie('access', access)
                 res.set_cookie('refresh', refresh)
@@ -44,7 +44,7 @@ class RetrieveUserAPI (APIView):
 
         except(jwt.exceptions.InvalidTokenError):
             # 사용 불가능한 토큰일 때
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error':'사용불가능한 토큰입니다.'},status=status.HTTP_400_BAD_REQUEST)
     
 #로그인
 class AuthAPI (APIView):

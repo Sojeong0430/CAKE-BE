@@ -1,7 +1,7 @@
 from django.urls import path
 from cakes.views import myroom_own , cake_custom ,myroom_visitor,message_open,create_message
 
-from .api import CreateMessageAPI , DeleteMessageAPI , MessageListAPI , MessageRetieve , CakeCustomAPI
+from .api import CreateMessageAPI , DeleteMessageAPI , MessageListAPI , MessageRetieve , CakeCustomAPI ,CakeGetAPI , CakeGetVisitAPI
 
 app_name = 'cakes'
 
@@ -17,5 +17,7 @@ urlpatterns = [
     path('api/deletemessage/<int:message_id>/',DeleteMessageAPI.as_view()),
     path('api/messagelist',MessageListAPI.as_view()),
     path('api/messageretrieve/<int:message_id>/',MessageRetieve.as_view()), 
-    path('api/cake-custom/<int:owner_id>/',CakeCustomAPI.as_view()),
+    path('api/cake-custom/',CakeCustomAPI.as_view()),
+    path('api/getcake/',CakeGetAPI.as_view()),
+    path('api/getcakevisit/<str:owner_username>/',CakeGetVisitAPI.as_view()),
     ]

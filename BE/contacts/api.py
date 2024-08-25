@@ -10,8 +10,6 @@ from rest_framework.permissions import AllowAny #일시적으로 인증 비활�
 #파티룸 주소 필드 수정
 class FriendAddAPI (APIView):
 
-    #permission_classes = [AllowAny]
-
     def post(self,request):
 
         Owner = request.user
