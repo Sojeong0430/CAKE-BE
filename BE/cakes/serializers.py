@@ -10,5 +10,5 @@ class MessageSerializer (serializers.ModelSerializer):
 class CakeSerializer (serializers.ModelSerializer):
     class Meta:
         model = cake_custom
-        fields = ['base','decorations','syrup']
+        fields = ['base','decorations','props']
         read_only_fields = ['party']

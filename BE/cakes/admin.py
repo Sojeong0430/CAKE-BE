@@ -5,7 +5,7 @@ from .models import message , cake_custom
 
 @admin.register(cake_custom)
 class CakeCustomAdmin (admin.ModelAdmin):
-    list_display = ('party','base','decorations','syrup')
+    list_display = ('party','base','decorations','props')
     search_fields = ('party',)
 
 @admin.register(message)

@@ -14,4 +14,4 @@ class cake_custom (models.Model):
     party = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     base = models.IntegerField(default=0)
     decorations = models.IntegerField(default=0)
-    syrup = models.IntegerField(default=0)
+    props= models.IntegerField(default=0)
