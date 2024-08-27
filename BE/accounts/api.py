@@ -124,20 +124,26 @@ class SignupAPI (APIView):
 #회원탈퇴
 class AccountDeleteAPI (APIView):
 
-    def delete(self, request):
+    def post(self, request):
 
-        permission_classes = [AllowAny]
+        user =  authenticate( #일치하면 사용자객체 반환 / 않으면 'None'반환
+            username=request.user.username,
+            password = request.data.get("password")
+        )
 
-        try:
-            user = request.user
-            user.delete()  # 사용자 삭제
-            response = Response({'message': '탈퇴 완료'}, status=status.HTTP_200_OK)
+        if user is not None:
+            try:
+                user = request.user
+                user.delete()  # 사용자 삭제
+                response = Response({'message': '탈퇴 완료'}, status=status.HTTP_200_OK)
+                
+                # 쿠키에서 JWT 토큰 삭제
+                response.delete_cookie('access')
+                response.delete_cookie('refresh')
+                
+                return response
             
-            # 쿠키에서 JWT 토큰 삭제
-            response.delete_cookie('access')
-            response.delete_cookie('refresh')
-            
-            return response
-        
-        except Exception as e:
-            return Response({'error': '탈퇴에 실패했습니다.', 'details': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            except Exception as e:
+                return Response({'error': '탈퇴에 실패했습니다.', 'details': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response({'message':'비밀번호가 틀렸습니다.'},status=status.HTTP_403_FORBIDDEN)
