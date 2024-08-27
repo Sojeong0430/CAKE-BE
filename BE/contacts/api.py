@@ -27,7 +27,7 @@ class FriendAddAPI (APIView):
             owner = Owner,
             username=SEARCH_friend.username,
             birthday=SEARCH_friend.birthday,
-            party_room_address = 'http://localhost:3000/'+SEARCH_friend.username+'/partyroom'
+            party_room_address = 'http://localhost:3000/'+SEARCH_friend.username+'/partyroom/visit'
         )
         ADD_friend.save()
 
