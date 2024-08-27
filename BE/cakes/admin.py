@@ -9,6 +9,6 @@ class CakeCustomAdmin (admin.ModelAdmin):
     search_fields = ('party',)
 
 @admin.register(message)
-class CakeCustomAdmin (admin.ModelAdmin):
+class MessageAdmin (admin.ModelAdmin):
     list_display = ('pk','party','sent_by')
     search_fields = ('party',)
