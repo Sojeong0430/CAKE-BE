@@ -13,11 +13,11 @@ urlpatterns = [
     path('createmessage/<int:user_id>/',create_message,name='messagemaker'),
 
     #api
-    path('api/createmessage/<int:user_id>/',CreateMessageAPI.as_view()),
-    path('api/deletemessage/<int:message_id>/',DeleteMessageAPI.as_view()),
-    path('api/messagelist',MessageListAPI.as_view()),
-    path('api/messageretrieve/<int:message_id>/',MessageRetieve.as_view()), 
-    path('api/cake-custom/',CakeCustomAPI.as_view()),
-    path('api/getcake/',CakeGetAPI.as_view()),
-    path('api/getcakevisit/<str:owner_username>/',CakeGetVisitAPI.as_view()),
+    path('api/createmessage/<int:user_id>/',CreateMessageAPI.as_view()), #메시지작성
+    path('api/deletemessage/<int:message_id>/',DeleteMessageAPI.as_view()), #메시지삭제
+    path('api/messagelist',MessageListAPI.as_view()), #메시지 리스트 조회
+    path('api/messageretrieve/<int:message_id>/',MessageRetieve.as_view()), #메시지 detail 조회 
+    path('api/cake-custom/',CakeCustomAPI.as_view()), #케이크 디자인 변경
+    path('api/getcake/',CakeGetAPI.as_view()), #케이크 디자인 조회 (owner)
+    path('api/getcakevisit/<str:owner_username>/',CakeGetVisitAPI.as_view()), #케이크 디자인 조회 (visit)
     ]
