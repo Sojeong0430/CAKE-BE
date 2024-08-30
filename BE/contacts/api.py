@@ -6,8 +6,7 @@ from accounts.models import CustomUser
 from .serializers import FriendADDSerializer, FriendListSerializer
 from rest_framework.permissions import AllowAny #일시적으로 인증 비활성화, 개발 중에만 사용
 
-#친구 추가 API / 수정사항 필요, 이미 추가 되어있는 친구라면 안되도록 해야함
-#파티룸 주소 필드 수정
+#친구 추가 API 
 class FriendAddAPI (APIView):
 
     def post(self,request):

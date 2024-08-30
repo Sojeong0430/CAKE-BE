@@ -16,6 +16,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 class RetrieveUserAPI (APIView):
 
     def get(self, request):
+
         try:
             # access token을 decode 해서 유저 id 추출 => 유저 식별
             access = request.COOKIES['access']
@@ -121,7 +122,7 @@ class SignupAPI (APIView):
             return res
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-#회원탈퇴
+# 회원탈퇴
 class AccountDeleteAPI (APIView):
 
     def post(self, request):

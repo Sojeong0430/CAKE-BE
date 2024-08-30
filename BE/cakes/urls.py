@@ -13,7 +13,7 @@ urlpatterns = [
     path('createmessage/<int:user_id>/',create_message,name='messagemaker'),
 
     #api
-    path('api/createmessage/<int:user_id>/',CreateMessageAPI.as_view()), #메시지작성
+    path('api/createmessage/<str:user_name>/',CreateMessageAPI.as_view()), #메시지작성
     path('api/deletemessage/<int:message_id>/',DeleteMessageAPI.as_view()), #메시지삭제
     path('api/messagelist',MessageListAPI.as_view()), #메시지 리스트 조회
     path('api/messageretrieve/<int:message_id>/',MessageRetieve.as_view()), #메시지 detail 조회 

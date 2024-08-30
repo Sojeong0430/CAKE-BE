@@ -11,10 +11,10 @@ class CreateMessageAPI(APIView):
 
     permission_classes = [AllowAny]
 
-    def post (self,request,user_id):
+    def post (self,request,user_name):
 
         try :
-            party = CustomUser.objects.get(id=user_id)
+            party = CustomUser.objects.get(username = user_name)
         except :
             return Response({'error':'해당되는 파티가 존재하지 않습니다.'},status=status.HTTP_404_NOT_FOUND)
         
