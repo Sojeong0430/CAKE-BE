@@ -4,7 +4,7 @@ from .models import message , cake_custom
 class MessageSerializer (serializers.ModelSerializer):
     class Meta:
         model = message
-        fields=['id','message_content','sent_by','font','matrix','background']
+        fields=['pk','message_content','sent_by','font','matrix','background']
         read_only_fields = ['party']
 
 class CakeSerializer (serializers.ModelSerializer):
