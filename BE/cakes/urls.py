@@ -1,7 +1,7 @@
 from django.urls import path
 from cakes.views import myroom_own , cake_custom ,myroom_visitor,message_open,create_message
 
-from .api import CreateMessageAPI , DeleteMessageAPI , MessageListAPI , MessageRetieve , CakeCustomAPI ,CakeGetAPI , CakeGetVisitAPI
+from .api import CreateMessageAPI , DeleteMessageAPI , MessageListAPI , MessageRetieve , CakeCustomAPI ,CakeGetAPI , CakeGetVisitAPI , MessageCountAPI_owner , MessageCountAPI_visit
 
 app_name = 'cakes'
 
@@ -20,4 +20,6 @@ urlpatterns = [
     path('api/cake-custom/',CakeCustomAPI.as_view()), #케이크 디자인 변경
     path('api/getcake/',CakeGetAPI.as_view()), #케이크 디자인 조회 (owner)
     path('api/getcakevisit/<str:owner_username>/',CakeGetVisitAPI.as_view()), #케이크 디자인 조회 (visit)
+    path('api/messagecount_owner/',MessageCountAPI_owner.as_view()), #받은 메시지 갯수 조회 (owner)
+    path('api/messagecount_visit/<str:user_name>/',MessageCountAPI_visit.as_view()), #받은 메시지 갯수 조회 (visit)
     ]

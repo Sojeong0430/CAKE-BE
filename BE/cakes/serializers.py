@@ -12,3 +12,6 @@ class CakeSerializer (serializers.ModelSerializer):
         model = cake_custom
         fields = ['base','decorations','props']
         read_only_fields = ['party']
+        
+class MessageCountSerializer (serializers.Serializer):
+     Message_count = serializers.IntegerField()

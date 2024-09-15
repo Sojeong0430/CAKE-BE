@@ -7,7 +7,7 @@ from rest_framework.permissions import AllowAny
 from django.contrib.auth import authenticate
 from django.shortcuts import render, get_object_or_404
 from birthday_cake.settings import SECRET_KEY
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer , TokenRefreshSerializer
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer , TokenRefreshSerializer 
 import jwt
 from rest_framework.permissions import AllowAny #실험용
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -148,3 +148,4 @@ class AccountDeleteAPI (APIView):
                 return Response({'error': '탈퇴에 실패했습니다.', 'details': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
             return Response({'message':'비밀번호가 틀렸습니다.'},status=status.HTTP_403_FORBIDDEN)
+        

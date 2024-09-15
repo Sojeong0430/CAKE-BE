@@ -101,3 +101,23 @@ class CakeGetVisitAPI (APIView):
         cake = cake_custom.objects.get(party=owner)
         serializer = CakeSerializer(cake)
         return Response (serializer.data)
+
+#받은 메시지 갯수 조회 API (owner)
+class MessageCountAPI_owner (APIView):
+
+    def get (self, request):
+        owner  = request.user
+        messagecount = message.objects.filter(party=owner).count()
+        serializer = MessageCountSerializer({'Message_count': messagecount})
+        return Response (serializer.data)
+    
+#받은 메시지 갯수 조회 API (visit)
+class MessageCountAPI_visit (APIView):
+
+    permission_classes = [AllowAny]
+
+    def get (self, request, user_name):
+        owner  = owner = CustomUser.objects.get(username=user_name)
+        messagecount = message.objects.filter(party=owner).count()
+        serializer = MessageCountSerializer({'Message_count': messagecount})
+        return Response (serializer.data)
