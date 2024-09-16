@@ -13,5 +13,17 @@ class message (models.Model):
 class cake_custom (models.Model):
     party = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
     base = models.IntegerField(default=0)
-    decorations = models.IntegerField(default=0)
-    props= models.IntegerField(default=0)
+    light= models.IntegerField(default=0)
+
+    deco1 = models.IntegerField(default=0)
+    deco2 = models.IntegerField(default=0)
+    deco3 = models.IntegerField(default=0)
+    deco4 = models.IntegerField(default=0)
+    deco5 = models.IntegerField(default=0)
+    deco6 = models.IntegerField(default=0)
+    deco7 = models.IntegerField(default=0)
+    deco8 = models.IntegerField(default=0)
+    deco9 = models.IntegerField(default=0)
+    deco10 = models.IntegerField(default=0)
+    deco11 = models.IntegerField(default=0)
+    

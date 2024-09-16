@@ -10,7 +10,7 @@ class MessageSerializer (serializers.ModelSerializer):
 class CakeSerializer (serializers.ModelSerializer):
     class Meta:
         model = cake_custom
-        fields = ['base','decorations','props']
+        fields = "__all__"
         read_only_fields = ['party']
         
 class MessageCountSerializer (serializers.Serializer):
