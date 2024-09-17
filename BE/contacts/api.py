@@ -21,16 +21,22 @@ class FriendAddAPI (APIView):
             SEARCH_friend = CustomUser.objects.get(username = Friend_username)
         except CustomUser.DoesNotExist :
             return Response({'error':'해당하는 친구가 존재하지 않습니다'},status=status.HTTP_404_NOT_FOUND)
+        
 
-        ADD_friend = Contact(
+        if Owner.username == Friend_username:
+            return Response({'error': '자기 자신은 친구로 추가할 수 없습니다.'}, status=status.HTTP_400_BAD_REQUEST)
+        elif Contact.objects.filter(owner=Owner, username=SEARCH_friend.username).exists():
+            return Response({'error' : '이미 존재하는 친구입니다.'},status=status.HTTP_400_BAD_REQUEST)
+        else:
+            ADD_friend = Contact(
             owner = Owner,
             username=SEARCH_friend.username,
             birthday=SEARCH_friend.birthday,
-            party_room_address = 'http://localhost:3000/'+SEARCH_friend.username+'/partyroom/visit'
-        )
-        ADD_friend.save()
+            party_room_address = 'http://localhost:3000/'+SEARCH_friend.username+'/partyroom/visit')
 
-        return Response({'success':'친구추가 성공'}, status=status.HTTP_201_CREATED)
+            ADD_friend.save()
+            return Response ({'success':'친구추가 성공'}, status=status.HTTP_201_CREATED)
+        
 
 #친구 리스트 조회 API
 class FriendListAPI (APIView):
