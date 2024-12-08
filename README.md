@@ -11,6 +11,7 @@
 - 2024 창업 동아리에서 시제품으로 제작한 프로젝트입니다.
 - 📆 개발 기간 : 2024.07 ~ 2024.8
 - 👉🏻 [프로젝트 소개 노션](https://honeysuckle-foxglove-71c.notion.site/C-KE-064f52d623e541ef8a19b901ce1c6535?pvs=4)
+- 💻 [FE](https://github.com/Sojeong0430/CAKE-FE)
 
 <br />
 
